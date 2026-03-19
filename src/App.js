@@ -14,17 +14,14 @@ function MainApp() {
 
   return (
     <>
-      {!isOnline && (
-        <Banner visible>
-          You are offline. Changes will sync when online.
-        </Banner>
-      )}
+      <Banner visible={!isOnline} style={{ backgroundColor: "#ffcccc"}}>
+        You are offline.
+      </Banner>
 
-      {isSyncing && (
-        <Banner visible>
-          Syncing contacts...
-        </Banner>
-      )}
+      <Banner visible={isSyncing && isOnline}>
+        Syncing contacts...
+      </Banner>
+
 
       <NavigationContainer>
         <Stack.Navigator initialRouteName="ContactList">
