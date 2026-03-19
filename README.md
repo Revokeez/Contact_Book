@@ -1,97 +1,176 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 React Native Contacts App (Offline-First with Sync)
 
-# Getting Started
+## 📖 Overview
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+This is a React Native Contacts application built with an **offline-first architecture** using Realm as the local database.
 
-## Step 1: Start Metro
+The app allows users to:
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+* Create contacts
+* Edit contacts
+* Delete contacts
+* Work completely offline
+* Automatically sync when internet connection is restored
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+This project demonstrates:
 
-```sh
-# Using npm
-npm start
+* Local database management
+* Schema migrations
+* Offline-first design
+* Context-based state management
+* Network state detection
 
-# OR using Yarn
-yarn start
+---
+
+## 🏗 Architecture
+
+The project follows a clean layered architecture:
+
+```
+UI (Screens / Components)
+        ↓
+Context (Business Logic + Sync)
+        ↓
+Realm (Local Database)
 ```
 
-## Step 2: Build and run your app
+### Folder Structure
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+React_Native01/
+│
+├── App.js
+├── db/
+│   └── realm.js
+├── context/
+│   └── ContactsContext.js
+├── screens/
+│   ├── ContactListScreen.js
+│   ├── ContactFormScreen.js
+│   └── ContactViewScreen.js
+├── components/
+│   ├── ContactCard.js
+│   ├── ContactListItem.js
+│   └── ContactForm.js
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## 🗄 Database (Realm)
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+### Contact Schema
 
-```sh
-bundle install
+```
+{
+  _id: int (Primary Key)
+  name: string
+  phone: string
+  email: string?
+  isSynced: boolean
+  updatedAt: date
+}
 ```
 
-Then, and every time you update your native dependencies, run:
+### Sync Logic
 
-```sh
-bundle exec pod install
+* `isSynced = false` → Contact needs to be synced
+* `isSynced = true` → Contact is synced with server
+
+Whenever a contact is created or edited:
+
+```
+isSynced = false
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+When the device reconnects to the internet:
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```
+triggerSync() runs automatically
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## 🌐 Offline-First Behavior
 
-## Step 3: Modify your app
+The app listens to network changes.
 
-Now that you have successfully run the app, let's make changes!
+If offline:
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+* Changes are saved locally
+* A banner notifies the user
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+When online:
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+* Unsynced contacts are automatically processed
+* Sync status updates
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+## 🚀 Installation
 
-### Now what?
+### 1️⃣ Install Dependencies
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+```
+npm install
+```
 
-# Troubleshooting
+### 2️⃣ Run Android
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```
+npx react-native run-android
+```
 
-# Learn More
+### 3️⃣ Clear Database (If Needed)
 
-To learn more about React Native, take a look at the following resources:
+Uninstall the app from your emulator/device to reset the Realm database.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---
+
+## 🔄 Schema Migrations
+
+When modifying the Realm schema:
+
+1. Increase `schemaVersion`
+2. Add migration logic inside `openRealm()`
+
+Example:
+
+```
+schemaVersion: 1
+```
+
+---
+
+## 📦 Dependencies
+
+Main libraries used:
+
+* React Native
+* Realm
+* React Navigation
+* React Native Paper
+* NetInfo
+
+---
+
+## 🎯 Key Concepts Demonstrated
+
+* Offline-first architecture
+* Local persistence with Realm
+* Schema versioning and migrations
+* Context API state management
+* Network-aware synchronization
+* Clean separation of concerns
+
+---
+
+## 🧠 Future Improvements
+
+* Real backend API integration
+* Conflict resolution strategy
+* Soft delete implementation
+* Sync queue system
+* Pull-to-refresh sync
+* Timestamp-based conflict handling
+
+---
