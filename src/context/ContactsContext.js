@@ -28,6 +28,10 @@ export const ContactsProvider = ({children}) => {
 
         for (let contact of unsynced) {
             try {
+
+                // Simulating delay of Syncing 
+                await new Promise(res => setTimeout(res, 1000));
+
                 updateContactRealm(contact.id, {
                     name: contact.name,
                     phone: contact.phone,
@@ -44,28 +48,27 @@ export const ContactsProvider = ({children}) => {
     };
 
     useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-        const online = !!state.isConnected;
-        setIsOnline(online);
+        const unsubscribe = NetInfo.addEventListener(state => {
+            const online = !!state.isConnected;
+            setIsOnline(online);
 
-        if (online) {
-            triggerSync();
-        }
-    });
-
-    return () => unsubscribe();
+            if (online) {
+                triggerSync();
+            }
+        });
+        return () => unsubscribe();
     }, []);
 
 
     const addContact = async contact => {
         const newId = createContactRealm(contact);
-        setContacts(prev => [...prev, {...contact, id: newId}]);
+        setContacts(prev => [...prev, {...contact, id: newId, isSynced: isOnline}]);
     };
 
     const editContact = async (id, newData) => {
         const updatedContact = {
             ...newData,
-            isSynced: false
+            isSynced: isOnline
         }
         updateContactRealm(id, updatedContact);
         setContacts(prev => prev.map(c => (c.id === id ? {...c, ...newData} : c)));
