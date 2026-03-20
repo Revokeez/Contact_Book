@@ -22,7 +22,6 @@ function MainApp() {
         Syncing contacts...
       </Banner>
 
-
       <NavigationContainer>
         <Stack.Navigator initialRouteName="ContactList">
           <Stack.Screen
