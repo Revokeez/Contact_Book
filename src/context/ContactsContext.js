@@ -35,7 +35,8 @@ export const ContactsProvider = ({children}) => {
                 updateContactRealm(contact.id, {
                     name: contact.name,
                     phone: contact.phone,
-                    email: contact.email
+                    email: contact.email,
+                    isSyncing: true
                 });
 
             } catch (err) {
@@ -62,13 +63,13 @@ export const ContactsProvider = ({children}) => {
 
     const addContact = async contact => {
         const newId = createContactRealm(contact);
-        setContacts(prev => [...prev, {...contact, id: newId, isSynced: isOnline}]);
+        setContacts(prev => [...prev, {...contact, id: newId, isSynced: false}]);
     };
 
     const editContact = async (id, newData) => {
         const updatedContact = {
             ...newData,
-            isSynced: isOnline
+            isSynced: false
         }
         updateContactRealm(id, updatedContact);
         setContacts(prev => prev.map(c => (c.id === id ? {...c, ...newData} : c)));
