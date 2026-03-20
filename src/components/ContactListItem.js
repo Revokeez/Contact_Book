@@ -7,6 +7,8 @@ const ContactListItem = ({contact, onPress}) => {
         <List.Item 
             title={name}
             description={phone}
+            titleStyle={{ color: 'black' }}
+            descriptionStyle={{ color: 'black' }} 
             left={() => <Avatar.Text size={40} label={name ? name[0] : "?"} />}
             onPress={onPress}
         />
