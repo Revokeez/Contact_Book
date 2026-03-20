@@ -1,4 +1,4 @@
-# 📱 React Native Contacts App (Offline-First with Sync)
+# 📱 React Native Contacts App (Offline-First with Simulated Sync)
 
 ## 📖 Overview
 
@@ -10,7 +10,7 @@ The app allows users to:
 * Edit contacts
 * Delete contacts
 * Work completely offline
-* Automatically sync when internet connection is restored
+* Simulate Automatically sync when internet connection is restored
 
 This project demonstrates:
 
@@ -106,6 +106,11 @@ When online:
 
 ---
 
+# How to test Sync:
+```
+To test you need to put your phone in Airplane mode. It will show you a banner telling you that you are offline. When you turn off Aiplane mode it will show another banner saying "Syncing contacts...".
+```
+
 ## 🚀 Installation
 
 ### 1️⃣ Install Dependencies
@@ -133,44 +138,19 @@ When modifying the Realm schema:
 1. Increase `schemaVersion`
 2. Add migration logic inside `openRealm()`
 
-Example:
-
-```
-schemaVersion: 1
-```
-
----
-
 ## 📦 Dependencies
 
 Main libraries used:
 
 * React Native
-* Realm
+* Realm(NoSQL)
 * React Navigation
 * React Native Paper
 * NetInfo
 
 ---
 
-## 🎯 Key Concepts Demonstrated
-
-* Offline-first architecture
-* Local persistence with Realm
-* Schema versioning and migrations
-* Context API state management
-* Network-aware synchronization
-* Clean separation of concerns
-
----
-
-## 🧠 Future Improvements
-
-* Real backend API integration
-* Conflict resolution strategy
-* Soft delete implementation
-* Sync queue system
-* Pull-to-refresh sync
-* Timestamp-based conflict handling
-
----
+# Some Important Notes!
+* The project was tested only in android. 
+* The sync is a simulation
+* One of the buttons to go back to another screen dosent show. But you can allways use your phone default buttons in the bottom.
